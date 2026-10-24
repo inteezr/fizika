@@ -5,6 +5,7 @@ Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. 
 - 145 ta mavzu, 14 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, kvant fizikasi, yadro fizikasi)
 - Har bir boʻlim uchun erkin laboratoriya (🔬), jumladan Shryodinger tenglamasini yechadigan kvant laboratoriyasi
 - Barcha mavzularda 3D koʻrinish (Three.js)
+- ⚔️ Bellashuv: sunʼiy intellekt (3 daraja) yoki doʻst bilan bir qurilmada oʻynash. Oʻyinlar: viktorina, formulani top, joyiga qoʻy, tez hisob, toʻgʻri yoki notoʻgʻri, mavzuni top, xotira juftliklari, aralash (`#/jang` havolasi)
 - Uch til: oʻzbek, rus va ingliz (yuqori oʻng burchakdagi UZ / RU / EN tugmalari, tanlov eslab qolinadi; havola orqali `?lang=ru` yoki `?lang=en`)
 
 ## Ochish
@@ -16,7 +17,7 @@ Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. 
 
 - `index.html` — tayyor sayt (GitHub Pages uchun)
 - `jonli-fizika.html` — `build.sh` chiqargan bitta fayl
-- `src/` — manba kodlar: `head.html`, `core.js`, `sim_*.js` (mavzular), `lab_*.js` (laboratoriyalar), `three3d*.js` (3D sahnalar), `ui.js`, `i18n.js` (til almashtirgich va tarjima mexanizmi), `i18n_dict.js` (rus va ingliz lugʻati)
+- `src/` — manba kodlar: `head.html`, `core.js`, `sim_*.js` (mavzular), `lab_*.js` (laboratoriyalar), `three3d*.js` (3D sahnalar), `ui.js`, `battle.js` va `battle_data.js` (bellashuv oʻyinlari va savollar banki), `i18n.js` (til almashtirgich va tarjima mexanizmi), `i18n_dict.js` (rus va ingliz lugʻati)
 
 ## Qayta yigʻish
 

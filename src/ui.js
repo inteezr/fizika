@@ -149,5 +149,5 @@ if('IntersectionObserver' in window&&!RM){const io=new IntersectionObserver(es=>
 readColors();setPlay(playing);
 select(SIMS[0].id,false);route();resize();
 requestAnimationFrame(loop);
-window.__sims=SIMS;window.__select=id=>openLab(id,false);window.__sec=c=>openSec(c,false);window.__home=()=>goHome(false);window.__state=()=>S;window.__mode=m=>setMode(m);window.__action=id=>{cur.action(id,S,P,api);renderInsp();};
+window.__sims=SIMS;window.__cats=CATS;window.__select=id=>openLab(id,false);window.__sec=c=>openSec(c,false);window.__home=()=>goHome(false);window.__state=()=>S;window.__mode=m=>setMode(m);window.__action=id=>{cur.action(id,S,P,api);renderInsp();};
 })();
