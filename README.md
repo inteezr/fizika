@@ -5,6 +5,7 @@ Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. 
 - 100 ta mavzu, 13 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, yadro fizikasi)
 - Har bir boʻlim uchun erkin laboratoriya (🔬)
 - Koʻp mavzularda 3D koʻrinish (Three.js)
+- Uch til: oʻzbek, rus va ingliz (yuqori oʻng burchakdagi UZ / RU / EN tugmalari, tanlov eslab qolinadi; havola orqali `?lang=ru` yoki `?lang=en`)
 
 ## Ochish
 
@@ -15,7 +16,7 @@ Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. 
 
 - `index.html` — tayyor sayt (GitHub Pages uchun)
 - `jonli-fizika.html` — `build.sh` chiqargan bitta fayl
-- `src/` — manba kodlar: `head.html`, `core.js`, `sim_*.js` (mavzular), `lab_*.js` (laboratoriyalar), `three3d*.js` (3D sahnalar), `ui.js`
+- `src/` — manba kodlar: `head.html`, `core.js`, `sim_*.js` (mavzular), `lab_*.js` (laboratoriyalar), `three3d*.js` (3D sahnalar), `ui.js`, `i18n.js` (til almashtirgich va tarjima mexanizmi), `i18n_dict.js` (rus va ingliz lugʻati)
 
 ## Qayta yigʻish
 
