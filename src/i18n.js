@@ -39,8 +39,8 @@ const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 let BIG=null;
 try{BIG=new RegExp('(?<![\\p{L}‘’\'#])(?:'+keys.map(esc).join('|')+')(?![\\p{L}‘’\'])','gu');}catch(e){BIG=null;}
 
-const UNITS_RU={'m/s²':'м/с²','m/s':'м/с','km/s':'км/с','km/h':'км/ч','km':'км','cm':'см','sm':'см','mm':'мм','nm':'нм','m':'м','kg':'кг','g':'г','s':'с','ms':'мс','N':'Н','kN':'кН','J':'Дж','kJ':'кДж','MJ':'МДж','W':'Вт','kW':'кВт','V':'В','kV':'кВ','A':'А','mA':'мА','Hz':'Гц','kHz':'кГц','Pa':'Па','kPa':'кПа','MPa':'МПа','K':'К','mol':'моль','C':'Кл','nC':'нКл','μC':'мкКл','T':'Тл','mT':'мТл','eV':'эВ','MeV':'МэВ','keV':'кэВ','Ω':'Ом','kΩ':'кОм','F':'Ф','μF':'мкФ','Gn':'Гн','m²':'м²','m³':'м³','sm²':'см²','sm³':'см³','g/m³':'г/м³','kg/m³':'кг/м³','N/m':'Н/м','N·m':'Н·м','J/K':'Дж/К','kg·m/s':'кг·м/с','yil':'лет','soat':'ч','min':'мин','daq':'мин','mln':'млн','mlrd':'млрд','marta':'раз','a.b.':'а.е.','kN/C':'кН/Кл','rad/s':'рад/с','l':'л','mkF':'мкФ','mkA':'мкА','μA':'мкА','μJ':'мкДж','mkJ':'мкДж'};
-const UNITS_EN={'sm':'cm','sm²':'cm²','sm³':'cm³','Gn':'H','yil':'yr','soat':'h','daq':'min','mlrd':'bn','marta':'times','a.b.':'AU','mkF':'μF','mkA':'μA','mkJ':'μJ'};
+const UNITS_RU={'m/s²':'м/с²','m/s':'м/с','km/s':'км/с','km/h':'км/ч','km':'км','cm':'см','sm':'см','mm':'мм','nm':'нм','m':'м','kg':'кг','g':'г','s':'с','ms':'мс','N':'Н','kN':'кН','J':'Дж','kJ':'кДж','MJ':'МДж','W':'Вт','kW':'кВт','V':'В','kV':'кВ','A':'А','mA':'мА','Hz':'Гц','kHz':'кГц','Pa':'Па','kPa':'кПа','MPa':'МПа','K':'К','mol':'моль','C':'Кл','nC':'нКл','μC':'мкКл','T':'Тл','mT':'мТл','eV':'эВ','MeV':'МэВ','keV':'кэВ','Ω':'Ом','kΩ':'кОм','F':'Ф','μF':'мкФ','Gn':'Гн','m²':'м²','m³':'м³','sm²':'см²','sm³':'см³','g/m³':'г/м³','kg/m³':'кг/м³','N/m':'Н/м','N·m':'Н·м','J/K':'Дж/К','kg·m/s':'кг·м/с','yil':'лет','soat':'ч','min':'мин','daq':'мин','mln':'млн','mlrd':'млрд','marta':'раз','a.b.':'а.е.','kN/C':'кН/Кл','rad/s':'рад/с','l':'л','mkF':'мкФ','mkA':'мкА','μA':'мкА','μJ':'мкДж','mkJ':'мкДж','y.y.':'св. лет','Gs':'Гц','kGs':'кГц','Om':'Ом','kOm':'кОм','MOm':'МОм','mGn':'мГн','dptr':'дптр','dB':'дБ','μm':'мкм','mkm':'мкм','u':'а.е.м.','fs':'фс','nF':'нФ','pF':'пФ','mF':'мФ'};
+const UNITS_EN={'sm':'cm','sm²':'cm²','sm³':'cm³','Gn':'H','yil':'yr','soat':'h','daq':'min','mlrd':'bn','marta':'times','a.b.':'AU','mkF':'μF','mkA':'μA','mkJ':'μJ','y.y.':'ly','Gs':'Hz','kGs':'kHz','Om':'Ω','kOm':'kΩ','MOm':'MΩ','mGn':'mH','dptr':'D','mkm':'μm'};
 const UN=L==='ru'?UNITS_RU:UNITS_EN;
 const ukeys=Object.keys(UN).sort((a,b)=>b.length-a.length).map(esc).join('|');
 const UNIT_AFTER=new RegExp('(\\d|[⁰¹²³⁴⁵⁶⁷⁸⁹]|∞)(\\s+|\\u00a0)('+ukeys+')(?![\\p{L}\\d²³])','gu');
@@ -67,7 +67,7 @@ function core(m){
     if(e2)out={v:lead+e2.v+tail,n:e2.n,raw:e2.raw};
     else{
       const u=UNIT_ALONE.exec(m);
-      if(u&&UN[u[2]]!==undefined)out={str:u[1]+UN[u[2]]+u[3]};
+      if(u&&UN[u[2]]!==undefined&&u[2].length>1)out={str:u[1]+UN[u[2]]+u[3]};
       else if(BIG&&LET.test(m)){
         let any=false;
         const s2=m.replace(BIG,k=>{const x=MD.get(k);if(!x)return k;any=true;return x.n?mask(x.v):x.v;});

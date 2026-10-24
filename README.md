@@ -2,9 +2,9 @@
 
 Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. Har bir mavzuda parametrlarni oʻzgartirib, natijani darhol koʻrish mumkin.
 
-- 100 ta mavzu, 13 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, yadro fizikasi)
-- Har bir boʻlim uchun erkin laboratoriya (🔬)
-- Koʻp mavzularda 3D koʻrinish (Three.js)
+- 145 ta mavzu, 14 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, kvant fizikasi, yadro fizikasi)
+- Har bir boʻlim uchun erkin laboratoriya (🔬), jumladan Shryodinger tenglamasini yechadigan kvant laboratoriyasi
+- Barcha mavzularda 3D koʻrinish (Three.js)
 - Uch til: oʻzbek, rus va ingliz (yuqori oʻng burchakdagi UZ / RU / EN tugmalari, tanlov eslab qolinadi; havola orqali `?lang=ru` yoki `?lang=en`)
 
 ## Ochish
