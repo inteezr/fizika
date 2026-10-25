@@ -7205,6 +7205,7 @@ const TYPES=[
  {id:'quiz',ic:'❓',n:['Viktorina','Викторина','Quiz'],d:['Fizika savollariga to‘g‘ri javobni toping','Найдите верный ответ на вопросы по физике','Pick the right answer to physics questions'],mcq:1},
  {id:'formula',ic:'∑',n:['Formulani top','Найди формулу','Find the formula'],d:['Yashirilgan belgini yoki mavzu formulasini toping','Найдите скрытый символ или формулу темы','Find the hidden symbol or a topic’s formula'],mcq:1},
  {id:'drag',ic:'🧩',n:['Joyiga qo‘y','Расставь по местам','Put it in place'],d:['Kartochkalarni sudrab, juftini toping','Перетащите карточки к их парам','Drag the cards onto their matches'],mcq:0},
+ {id:'build',ic:'🛠️',n:['Modelni yig‘','Собери модель','Build the model'],d:['Zanjir, richag, linza, ko‘zgu… shunday yig‘ingki, shart bajarilsin','Цепь, рычаг, линза, зеркала… соберите так, чтобы выполнилось условие','Circuits, levers, lenses, mirrors… assemble them to meet the goal'],mcq:0},
  {id:'calc',ic:'⚡',n:['Tez hisob','Быстрый расчёт','Quick maths'],d:['Masalani tez yeching','Быстро решите задачу','Solve the problem fast'],mcq:1},
  {id:'tf',ic:'✔︎',n:['To‘g‘ri yoki noto‘g‘ri','Верно или нет','True or false'],d:['Gapni tez baholang','Быстро оцените утверждение','Judge the statement quickly'],mcq:1},
  {id:'topic',ic:'🔭',n:['Mavzuni top','Угадай тему','Guess the topic'],d:['Tavsif qaysi mavzuga tegishli?','К какой теме относится описание?','Which topic does the description belong to?'],mcq:1},
@@ -7433,6 +7434,85 @@ const css=`
 @keyframes btCup{from{opacity:0;transform:scale(.4) rotate(-12deg)}to{opacity:1;transform:none}}
 @keyframes btShake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes btPulse{50%{opacity:.45}}
+.bb{grid-area:a;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(220px,1fr);gap:14px;align-items:start;animation:btIn .35s ease both}
+.bb-q .bt-qt{font-size:clamp(17px,2.3vw,21px)}
+.bb-hint{font:600 14px/1.3 "STIX Two Text","Times New Roman",serif;font-style:italic;color:var(--violet)}
+.bb-sc{position:relative;aspect-ratio:2/1;border:1px solid var(--line);border-radius:18px;background:radial-gradient(120% 110% at 50% 0%,color-mix(in srgb,var(--accent) 8%,var(--panel)),var(--panel));overflow:hidden;transition:box-shadow .4s,border-color .4s}
+.bb-sc::before{content:"";position:absolute;inset:0;background-image:radial-gradient(color-mix(in srgb,var(--ink) 9%,transparent) 1px,transparent 1.2px);background-size:20px 20px;pointer-events:none}
+.bb-sc.win{border-color:var(--green);box-shadow:0 0 0 2px var(--green),0 18px 50px -18px var(--green)}
+.bb-sc.sol{border-color:var(--warm)}
+.bb-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.bb-ov{position:absolute;inset:0;transform-origin:50% 66.667%;transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
+.bb-rot{transform-origin:300px 200px;transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
+.bt-slot.bb-slot{position:absolute;min-height:0;padding:2px;border-radius:10px;background:color-mix(in srgb,var(--panel) 72%,transparent);border-width:2px}
+.bb-slot.lens{border-radius:50%/22%;padding:1px}
+.bb-slot.q{border-radius:50%}
+.bb-slot.mirsl{border-radius:12px}
+.bb-slot:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.bb-slot .bb-chip{width:100%;height:100%;padding:0 2px;display:grid;place-items:center;font-size:clamp(9px,1.45vw,14px);line-height:1.05;border-radius:8px;box-shadow:none;animation:bbDrop .35s cubic-bezier(.2,1.5,.4,1)}
+@keyframes bbDrop{from{transform:scale(.6)}to{transform:none}}
+.bb-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+.bb-goal{font:700 15px/1.3 "IBM Plex Mono",monospace;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,var(--panel));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line))}
+.bb-tray{min-height:70px;padding:10px;gap:8px}
+.bb-read{display:grid;gap:4px;padding:10px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font:500 13.5px/1.35 "IBM Plex Mono",monospace;min-height:48px}
+.bb-r{display:flex;justify-content:space-between;gap:10px}.bb-r span{color:var(--muted)}.bb-r b{font-weight:700;white-space:nowrap}.bb-r b.g{color:var(--green)}.bb-r b.r{color:var(--red)}
+.bb-ok{position:absolute;right:12px;top:10px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font:800 24px/1 sans-serif;transform:scale(0);transition:transform .45s cubic-bezier(.2,1.6,.4,1);box-shadow:0 8px 24px -8px var(--green)}
+.bb-sc.win .bb-ok{transform:scale(1)}
+.bb-chip.res{font-family:"IBM Plex Mono",monospace;font-weight:700;background:repeating-linear-gradient(90deg,transparent 0 14%,color-mix(in srgb,var(--warm) 22%,transparent) 14% 20%),var(--panel)}
+.bb-chip.wt{color:#fff;border-color:#4b5363;background:linear-gradient(180deg,#9aa4b6,#5b6475);text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.bb-chip.lns{border-color:#6cb6ff;background:linear-gradient(90deg,rgba(108,182,255,.14),rgba(108,182,255,.38),rgba(108,182,255,.14)),var(--panel)}
+.bb-chip .ls{display:none}.bb-slot .bb-chip .ls{display:inline}.bb-slot .bb-chip .lf{display:none}
+.bb-slot.lens .bb-chip{border-radius:50%/22%;font-weight:700}
+.bb-chip.mir{font:700 26px/1 system-ui,sans-serif;min-width:52px;color:#9fd4ff;background:linear-gradient(135deg,color-mix(in srgb,#9fd4ff 18%,var(--panel)),var(--panel))}
+.bb-slot .bb-chip.mir{font-size:clamp(20px,4vw,40px)}
+.bb-chip.qp,.bb-chip.qn{color:#fff;border-radius:50%;min-width:52px;min-height:52px;padding:6px;font:700 15px/1 "IBM Plex Mono",monospace}
+.bb-chip.qp{background:radial-gradient(circle at 35% 30%,#ff9a9a,#e5484d 70%);border-color:#c83a3f}
+.bb-chip.qn{background:radial-gradient(circle at 35% 30%,#9cc8ff,#3a7be0 70%);border-color:#2f63b8}
+.bb-slot.q .bb-chip{border-radius:50%;min-width:0;min-height:0}
+.bb-chip.cup{border-left:6px solid var(--cc);background:linear-gradient(90deg,color-mix(in srgb,var(--cc) 22%,var(--panel)),var(--panel))}
+.bb-ghost{transform:translate(-50%,-50%) rotate(-4deg) scale(1.1)!important}
+.bb-svg .t{fill:var(--muted);font:600 13px "IBM Plex Mono",monospace}
+.bb-svg .w{stroke:var(--ink);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.72}
+.bb-svg .bat{stroke-width:3}.bb-svg .bat2{stroke-width:8;stroke-linecap:butt}
+.bb-svg .nd{fill:var(--ink);opacity:.8}
+.bb-svg .cur{stroke:var(--warm);stroke-width:4;fill:none;stroke-dasharray:2 14;stroke-linecap:round;animation:bbFlow var(--d,1s) linear infinite;filter:drop-shadow(0 0 3px var(--warm))}
+@keyframes bbFlow{to{stroke-dashoffset:-32}}
+.bb-svg .tk{stroke:var(--muted);stroke-width:1.5}
+.bb-svg .fl{fill:color-mix(in srgb,var(--ink) 30%,var(--panel));stroke:var(--ink);stroke-width:1.5;opacity:.85}
+.bb-svg .bm{fill:color-mix(in srgb,var(--warm) 55%,#8a5a2b);stroke:color-mix(in srgb,var(--ink) 50%,transparent);stroke-width:1}
+.bb-svg .fx{fill:#5b6475;stroke:#3e4552}.bb-svg .fxt{fill:#fff}
+.bb-svg .ax{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:6 6}
+.bb-svg .obj{stroke:var(--accent);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.bb-svg .scr{fill:color-mix(in srgb,var(--ink) 18%,var(--panel));stroke:var(--ink);stroke-width:1;opacity:.85}
+.bb-svg .fp{fill:var(--violet)}
+.bb-svg .ray{fill:none;stroke-width:2.2;stroke-linejoin:round;opacity:.9}
+.bb-svg .r1{stroke:var(--warm)}.bb-svg .r2{stroke:var(--accent)}.bb-svg .r3{stroke:var(--violet)}
+.bb-svg .img{stroke:var(--green);stroke-width:5;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 6px var(--green))}
+.bb-svg .blur{fill:var(--warm);opacity:.45}
+.bb-svg .cell{fill:color-mix(in srgb,var(--ink) 4%,transparent);stroke:color-mix(in srgb,var(--ink) 12%,transparent);stroke-dasharray:4 5}
+.bb-svg .las{fill:#2b2f3a;stroke:#ff3b5c;stroke-width:2}
+.bb-svg .tgt circle{fill:none;stroke:#ff3b5c;stroke-width:3}.bb-svg .tgt circle:last-child{fill:#ff3b5c}
+.bb-svg .tgt-on{fill:none;stroke:var(--green);stroke-width:4;animation:bbPing 1s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes bbPing{from{opacity:1;transform:scale(.6)}to{opacity:0;transform:scale(1.5)}}
+.bb-svg .beam{stroke:#ff3b5c;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px #ff3b5c);stroke-dasharray:1400;animation:bbBeam .6s ease-out both}
+@keyframes bbBeam{from{stroke-dashoffset:1400}to{stroke-dashoffset:0}}
+.bb-svg .pp{stroke:var(--ink);stroke-width:3}
+.bb-svg .dim{stroke:var(--muted);stroke-width:1.5;fill:none}
+.bb-svg .fln{stroke-width:2;opacity:.55}.bb-svg .fln.p{stroke:#e5484d}.bb-svg .fln.n{stroke:#3a7be0}
+.bb-svg .ea,.bb-svg .eb,.bb-svg .en{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.bb-svg .ea{stroke:#e5484d}.bb-svg .eb{stroke:#3a7be0}.bb-svg .en{stroke:var(--violet);stroke-width:5}
+.bb-svg .zero{fill:color-mix(in srgb,var(--green) 25%,transparent);stroke:var(--green);stroke-width:3}
+.bb-svg .bk{fill:color-mix(in srgb,#9fd4ff 8%,transparent);stroke:var(--ink);stroke-width:3;opacity:.8}
+.bb-svg .liq{transition:fill .5s}
+.bb-svg .th{fill:var(--panel);stroke:var(--ink);stroke-width:1.5;opacity:.85}.bb-svg .thb{fill:#e5484d}
+.bb-svg .hg{fill:#e5484d;transition:y .5s,height .5s}
+.bb-svg .tline{stroke:var(--green);stroke-width:3;stroke-dasharray:4 3}
+.bb-svg .stm{fill:none;stroke:var(--muted);stroke-width:2;opacity:0;animation:bbSteam 1.6s ease-in infinite}
+@keyframes bbSteam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-14px)}}
+.bb-svg .spr{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linejoin:round;opacity:.8}
+.bb-svg .lvl{stroke:var(--green);stroke-width:2.5;stroke-dasharray:8 5}
+@media (max-width:640px){.bb-svg .t{font-size:16px}.bb-svg .w{stroke-width:3.5}}
+@media (max-width:760px){.bb{grid-template-columns:minmax(0,1fr)}.bb-side{display:grid;grid-template-columns:minmax(0,1fr);}.bb-goal{font-size:14px}}
 @media (prefers-reduced-motion: reduce){.bt *{animation:none!important;transition:none!important}}
 @media (max-width:860px){.bt-types{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){
@@ -7540,9 +7620,9 @@ function start(){clearAll();for(const k in used)delete used[k];
  // markaz (taymer) ni o‘yinchilar orasiga qo‘yish
  const sb=$$('.bt-sb'),mid=document.createElement('div');mid.className='bt-mid';mid.innerHTML='<div class="bt-ring" id="bt-ring"><span id="bt-tn">–</span></div><small id="bt-rn"></small>';sb.insertBefore(mid,sb.children[1]);
  $$('#bt-quit').onclick=lobby;
- intro(()=>{if(G.type==='memory')memStart();else if(G.type==='drag')ddStart();else mcqNext();});}
+ intro(()=>{if(G.type==='memory')memStart();else if(G.type==='drag')ddStart();else if(G.type==='build')bbStart();else mcqNext();});}
 function intro(cb){const my=qid;const v=document.createElement('div');v.className='bt-vs';const ty=TYPES.find(t=>t.id===G.type);
- v.innerHTML=`<div><div class="row"><div class="pp l"><span class="ava">${G.pl[0].av}</span>${esc(G.pl[0].name)}</div><div class="v">VS</div><div class="pp r"><span class="ava p1">${G.pl[1].av}</span>${esc(G.pl[1].name)}${G.ai?`<small style="font:600 12px/1 'IBM Plex Mono',monospace;color:var(--muted)">${XA(DIFF[st.diff])}</small>`:''}</div></div><div class="meta">${ty.ic} ${esc(XA(ty.n))}${G.type==='memory'?'':' · '+(G.type==='drag'?({5:2,10:4,15:5}[G.rounds]||3):G.rounds)+' '+X('raund','раундов','rounds')}</div><div class="cdw"></div></div>`;
+ v.innerHTML=`<div><div class="row"><div class="pp l"><span class="ava">${G.pl[0].av}</span>${esc(G.pl[0].name)}</div><div class="v">VS</div><div class="pp r"><span class="ava p1">${G.pl[1].av}</span>${esc(G.pl[1].name)}${G.ai?`<small style="font:600 12px/1 'IBM Plex Mono',monospace;color:var(--muted)">${XA(DIFF[st.diff])}</small>`:''}</div></div><div class="meta">${ty.ic} ${esc(XA(ty.n))}${G.type==='memory'?'':' · '+(G.type==='drag'?({5:2,10:4,15:5}[G.rounds]||3):G.type==='build'?(BBN[G.rounds]||4):G.rounds)+' '+X('raund','раундов','rounds')}</div><div class="cdw"></div></div>`;
  root.appendChild(v);SND.whoosh();let n=3,fin=false;const done=()=>{if(fin)return;fin=true;v.remove();if(my===qid)cb();};v.onclick=done;
  if(RMO){later(done,500);return;}
  const step=()=>{if(fin||my!==qid)return;const w=v.querySelector('.cdw');w.innerHTML=n>0?`<div class="cd">${n}</div>`:`<div class="cd go">${X('Boshla!','Старт!','Go!')}</div>`;if(n>0){SND.tick();n--;later(step,650);}else{SND.go();later(done,520);}};later(step,950);}
@@ -7683,6 +7763,219 @@ function aiMove(){if(!G||G.found===G.pairs)return;const live=G.cards.map((c,i)=>
  later(()=>{const pa=G.cards[a].p;const mate=[...G.mem.entries()].find(([i,p])=>p===pa&&i!==a&&!G.cards[i].done);let b;if(mate)b=mate[0];else{const u2=live.filter(i=>i!==a&&!G.mem.has(i));const pool=u2.length?u2:live.filter(i=>i!==a);b=pool[Math.floor(Math.random()*pool.length)];}flip(b);},700);}
 
 /* ----- yakun ----- */
+/* ----- modelni yig‘ (2D jumboqlar: zanjir, richag, linza, lazer, zaryad, issiqlik, prujina) ----- */
+const rI=n=>Math.floor(Math.random()*n);
+const nf=(v,d=2)=>{let s=String(Math.round(v*10**d)/10**d);return LG==='en'?s:s.replace('.',',');};
+const U_={kg:X('kg','кг','kg'),g:X('g','г','g'),sm:X('sm','см','cm'),A:X('A','А','A'),V:X('V','В','V'),Nm:X('N·m','Н·м','N·m'),Nsm:X('N/sm','Н/см','N/cm')};
+const bbRows=a=>a.map(r=>`<div class="bb-r"><span>${r[0]}</span><b class="${r[2]===true?'g':r[2]===false?'r':''}">${r[1]}</b></div>`).join('');
+const bbCur=(d,I)=>I>1e-9?`<path class="cur" d="${d}" style="--d:${Math.max(.22,Math.min(3.5,1.1/I)).toFixed(2)}s"/>`:'';
+const bbAss=(chips,pairs)=>{const usedC=new Set(),sol=[];pairs.forEach(([s,v])=>{const k=chips.findIndex((c,i)=>!usedC.has(i)&&c.v===v);usedC.add(k);sol[s]=k;});return sol;};
+const bbTxt=(x,y,t,a)=>`<text x="${x}" y="${y}" class="t"${a?` text-anchor="${a}"`:''}>${t}</text>`;
+
+/* 1) aralash ulanish: R1 + (R2 || R3) = maqsad */
+function pzCircA(){const V=[1,2,3,4,6,8,12],U=12;let p,k,T;
+ for(let t=0;t<400;t++){p=shuf(V).slice(0,3);const tots=[0,1,2].map(i=>{const o=p.filter((_,j)=>j!==i);return p[i]+o[0]*o[1]/(o[0]+o[1]);});if(new Set(tots.map(x=>x.toFixed(3))).size<3)continue;k=rI(3);T=tots[k];if(Math.abs(T*100-Math.round(T*100))<1e-6)break;}
+ const o=p.filter((_,j)=>j!==k);const chips=shuf(p).map(v=>({v,l:`${v} Ω`,c:'res'}));
+ const sol=bbAss(chips,[[0,p[k]],[1,o[0]],[2,o[1]]]);
+ const base=`<path class="w" d="M60 140V60H300V110H520V190H300V110M520 190V240H60V158"/><line x1="38" y1="140" x2="82" y2="140" class="w bat"/><line x1="49" y1="158" x2="71" y2="158" class="w bat2"/>${bbTxt(90,146,'+')}${bbTxt(90,166,`U = ${U} ${U_.V}`)}${bbTxt(180,30,'R₁','middle')}${bbTxt(410,82,'R₂','middle')}${bbTxt(410,162,'R₃','middle')}<circle cx="300" cy="110" r="4" class="nd"/><circle cx="520" cy="190" r="4" class="nd"/><circle cx="300" cy="190" r="4" class="nd"/><circle cx="520" cy="110" r="4" class="nd"/>`;
+ return{cat:'tok',ic:'⚡',tag:['Elektr zanjiri','Электрическая цепь','Electric circuit'],
+  task:X(`Zanjirni yig‘ing: umumiy qarshilik <b>R = ${nf(T)} Ω</b> bo‘lsin`,`Соберите цепь: общее сопротивление <b>R = ${nf(T)} Ω</b>`,`Build the circuit so the total resistance is <b>R = ${nf(T)} Ω</b>`),
+  hint:'R = R₁ + R₂R₃ / (R₂ + R₃)',goal:`R = ${nf(T)} Ω`,chips,sol,base,
+  slots:[{x:180,y:60,w:84,h:38},{x:410,y:110,w:84,h:38},{x:410,y:190,w:84,h:38}],
+  view(pl){const r=pl.map(c=>c<0?0:chips[c].v);const g2=r[1]?1/r[1]:0,g3=r[2]?1/r[2]:0;
+   if(!r[0]||!(g2+g3))return{read:bbRows([[X('Zanjir uzilgan','Цепь разомкнута','Open circuit'),'I = 0']])};
+   const R=r[0]+1/(g2+g3),I=U/R,I2=I*g2/(g2+g3),I3=I-I2,ok=pl.every(c=>c>=0)&&Math.abs(R-T)<1e-6;
+   return{ok,dyn:bbCur('M60 140V60H300V110',I)+bbCur('M300 110H520',I2)+bbCur('M300 110V190H520',I3)+bbCur('M520 110V190',I2)+bbCur('M520 190V240H60V158',I),
+    read:bbRows([['R',`${nf(R)} Ω`,pl.every(c=>c>=0)?ok:null],['I = U / R',`${nf(I)} ${U_.A}`],['I₂ · I₃',`${nf(I2)} · ${nf(I3)} ${U_.A}`]])};}};}
+pzCircA.cat='tok';
+
+/* 2) ikki parallel tarmoq: I1 = I2 */
+function pzCircB(){const U=12;let a,b,c,d;
+ for(;;){const v=shuf([1,2,3,4,5,6,7,8,9]);[a,b]=v;const s=a+b;const rest=v.slice(2).filter(x=>x<s&&x!==s-x&&v.slice(2).includes(s-x));if(rest.length){c=rest[0];d=s-c;break;}}
+ const chips=shuf([a,b,c,d]).map(v=>({v,l:`${v} Ω`,c:'res'}));const sol=bbAss(chips,[[0,a],[1,b],[2,c],[3,d]]);
+ const base=`<path class="w" d="M40 195V150H130V90H530V210H130V150M530 150H570V270H40V213"/><line x1="18" y1="195" x2="62" y2="195" class="w bat"/><line x1="29" y1="213" x2="51" y2="213" class="w bat2"/>${bbTxt(70,201,'+')}${bbTxt(70,236,`${U} ${U_.V}`)}${bbTxt(170,80,'I₁','middle')}${bbTxt(170,200,'I₂','middle')}<circle cx="130" cy="150" r="4" class="nd"/><circle cx="530" cy="150" r="4" class="nd"/>`;
+ return{cat:'tok',ic:'⚡',tag:['Elektr zanjiri','Электрическая цепь','Electric circuit'],
+  task:X('Qarshiliklarni joylang: ikkala tarmoqdagi tok kuchi <b>teng</b> bo‘lsin','Расставьте резисторы: токи в обеих ветвях должны быть <b>равны</b>','Place the resistors so both branch currents are <b>equal</b>'),
+  hint:'I = U / R,  R = R₁ + R₂',goal:'I₁ = I₂',chips,sol,base,
+  slots:[{x:265,y:90,w:84,h:38},{x:405,y:90,w:84,h:38},{x:265,y:210,w:84,h:38},{x:405,y:210,w:84,h:38}],
+  view(pl){const r=pl.map(c=>c<0?0:chips[c].v);const I1=r[0]&&r[1]?U/(r[0]+r[1]):0,I2=r[2]&&r[3]?U/(r[2]+r[3]):0,I=I1+I2;const full=pl.every(c=>c>=0),ok=full&&Math.abs(I1-I2)<1e-9;
+   return{ok,dyn:bbCur('M40 195V150H130',I)+bbCur('M130 150V90H530V150',I1)+bbCur('M130 150V210H530V150',I2)+bbCur('M530 150H570V270H40V213',I),
+    read:bbRows([['I₁',I1?`${nf(I1)} ${U_.A}`:'0',full?ok:null],['I₂',I2?`${nf(I2)} ${U_.A}`:'0',full?ok:null],['I = I₁ + I₂',`${nf(I)} ${U_.A}`]])};}};}
+pzCircB.cat='tok';
+
+/* 3) richag muvozanati: ΣM = 0 */
+function pzLever(){let m0,p0,w,x;
+ for(let t=0;t<800;t++){w=[1+rI(5),1+rI(5)];x=shuf([1,2,3,4]).slice(0,2);const S=w[0]*x[0]+w[1]*x[1];const o=[];for(let q=1;q<=4;q++)if(S%q===0&&S/q>=2&&S/q<=12)o.push(q);if(!o.length)continue;p0=o[rI(o.length)];m0=S/p0;
+  const dec=1+rI(5);const vals=[w[0],w[1],dec];if(vals.some(v=>S%v===0&&S/v<=4))continue;w.push(dec);break;}
+ const chips=shuf(w).map(v=>({v,l:`${v} ${U_.kg}`,c:'wt'}));
+ const pos=[-4,-3,-2,-1,1,2,3,4].filter(q=>q!==-p0);const XP=q=>300+62*q;
+ const sol=bbAss(chips,[[pos.indexOf(x[0]),w[0]],[pos.indexOf(x[1]),w[1]]]);
+ let ticks='';for(let q=-4;q<=4;q++)ticks+=`<line x1="${XP(q)}" y1="190" x2="${XP(q)}" y2="200" class="tk"/>${bbTxt(XP(q),216,Math.abs(q)*10,'middle')}`;
+ const base=`<line x1="40" y1="262" x2="560" y2="262" class="w" style="opacity:.35"/><polygon points="300,200 274,262 326,262" class="fl"/><g class="bb-rot"><rect x="40" y="188" width="520" height="12" rx="5" class="bm"/>${ticks}<rect x="${XP(-p0)-25}" y="146" width="50" height="42" rx="7" class="fx"/><text x="${XP(-p0)}" y="173" class="t fxt" text-anchor="middle">${m0} ${U_.kg}</text></g>${bbTxt(300,285,X('masofa, sm','расстояние, см','distance, cm'),'middle')}`;
+ return{cat:'sta',ic:'⚖️',tag:['Richag','Рычаг','Lever'],
+  task:X('Yuklarni qo‘yib, richagni <b>muvozanatga</b> keltiring','Подвесьте грузы и <b>уравновесьте</b> рычаг','Place weights to <b>balance</b> the lever'),
+  hint:'M = F·d,  M₁ = M₂',goal:'ΣM = 0',chips,sol,base,
+  slots:pos.map(q=>({x:XP(q),y:166,w:50,h:42,c:'wtsl'})),
+  view(pl){let L=m0*p0,R=0,n=0;pl.forEach((c,s)=>{if(c<0)return;n++;const q=pos[s],m=chips[c].v;if(q<0)L+=m*-q;else R+=m*q;});const tq=R-L,ok=n>0&&tq===0;
+   return{ok,rot:Math.max(-10,Math.min(10,tq*1.4)),read:bbRows([['M₁ ↺',`${nf(L)} ${U_.Nm}`,n?ok:null],['M₂ ↻',`${nf(R)} ${U_.Nm}`,n?ok:null],[X('g = 10 m/s², 10 sm = 0,1 m','g = 10 м/с², 10 см = 0,1 м','g = 10 m/s², 10 cm = 0.1 m'),'']])};}};}
+pzLever.cat='sta';
+
+/* 4) yupqa linza: 1/F = 1/d + 1/f, ekran 100 sm da */
+function pzLens(){const L=100,ach={10:9,20:16,30:21,40:24,50:25};const xs=[10,20,30,40,50];const x0=xs[rI(5)],F=ach[x0];
+ const dec=shuf([12,14,18,28,30,35].filter(v=>!Object.values(ach).includes(v))).slice(0,2);
+ const chips=shuf([F,...dec]).map(v=>({v,l:`<span class="lf">F = ${v} ${U_.sm}</span><span class="ls">${v}</span>`,c:'lns'}));
+ const cms=[10,20,30,40,50,60,70,80,90],XC=c=>60+4.8*c,Y=h=>170-5*h;const sol=[];sol[cms.indexOf(x0)]=chips.findIndex(c=>c.v===F);
+ let rul='';for(let c=0;c<=100;c+=10)rul+=`<line x1="${XC(c)}" y1="252" x2="${XC(c)}" y2="260" class="tk"/>${bbTxt(XC(c),276,c,'middle')}`;
+ const base=`<line x1="40" y1="170" x2="560" y2="170" class="ax"/><line x1="56" y1="256" x2="544" y2="256" class="w" style="opacity:.4"/>${rul}<path d="M60 170V120M52 130L60 118L68 130" class="obj"/>${bbTxt(60,108,X('jism','предмет','object'),'middle')}<rect x="536" y="70" width="10" height="190" rx="3" class="scr"/>${bbTxt(541,62,X('ekran','экран','screen'),'middle')}${bbTxt(300,296,U_.sm,'middle')}`;
+ return{cat:'opt',ic:'🔍',tag:['Yupqa linza','Тонкая линза','Thin lens'],
+  task:X('Linzani tanlab relsga qo‘ying: ekranda <b>aniq tasvir</b> hosil bo‘lsin','Выберите линзу и поставьте её на скамью: на экране должно получиться <b>чёткое изображение</b>','Pick a lens and put it on the rail so the screen shows a <b>sharp image</b>'),
+  hint:'1/F = 1/d + 1/f',goal:X('aniq tasvir','чёткое изображение','sharp image'),chips,sol,base,
+  slots:cms.map(c=>({x:XC(c),y:170,w:30,h:116,c:'lens'})),
+  view(pl){const on=pl.map((c,s)=>[c,s]).filter(a=>a[0]>=0);
+   if(!on.length)return{read:bbRows([[X('Linzani relsga qo‘ying','Поставьте линзу на скамью','Put a lens on the rail'),'—']])};
+   if(on.length>1)return{read:bbRows([[X('Faqat bitta linza kerak','Нужна только одна линза','Use only one lens'),'✗',false]])};
+   const x=cms[on[0][1]],f=chips[on[0][0]].v,h=10;const toS=L-x;
+   const r1=h-h*toS/f,r2=h-h*L/x;const cl=v=>Math.max(-40,Math.min(40,v));
+   let dyn=`<circle cx="${XC(x-f)}" cy="170" r="3.5" class="fp"/><circle cx="${XC(x+f)}" cy="170" r="3.5" class="fp"/>${bbTxt(XC(x-f),190,'F','middle')}${bbTxt(XC(x+f),190,'F','middle')}`;
+   dyn+=`<polyline class="ray r1" points="${XC(0)},${Y(h)} ${XC(x)},${Y(h)} ${XC(L)},${Y(cl(r1))}"/><polyline class="ray r2" points="${XC(0)},${Y(h)} ${XC(L)},${Y(cl(r2))}"/>`;
+   const hits=[r1,r2];if(x>f){const y3=-h*f/(x-f);hits.push(y3);dyn+=`<polyline class="ray r3" points="${XC(0)},${Y(h)} ${XC(x)},${Y(cl(y3))} ${XC(L)},${Y(cl(y3))}"/>`;}
+   const ok=Math.abs(1/x+1/toS-1/f)<1e-9;let fd='∞';
+   if(x>f){const fi=x*f/(x-f),hi=Math.max(-17,-h*fi/x);fd=`${nf(fi,1)} ${U_.sm}`;if(ok)dyn+=`<path class="img" d="M541 170V${Y(hi)}M533 ${Y(hi)-10}L541 ${Y(hi)+2}L549 ${Y(hi)-10}"/>`;}
+   else if(x<f){fd=X('mavhum','мнимое','virtual');}
+   if(!ok){const lo=Math.min(...hits.map(cl)),hi2=Math.max(...hits.map(cl));dyn+=`<rect x="533" y="${Y(hi2)}" width="16" height="${Math.max(3,(hi2-lo)*5)}" rx="4" class="blur"/>`;}
+   return{ok,dyn,read:bbRows([['d',`${x} ${U_.sm}`],['F',`${f} ${U_.sm}`],['f',fd,ok],[X('linzadan ekrangacha','от линзы до экрана','lens to screen'),`${toS} ${U_.sm}`,ok]])};}};}
+pzLens.cat='opt';
+
+/* 5) lazer va ko‘zgular: tushish burchagi = qaytish burchagi */
+function pzLaser(){const CX=c=>100+80*c,CY=r=>70+80*r;const r0=rI(3);let cells=[],rt;
+ if(Math.random()<.45){const r1=shuf([0,1,2].filter(r=>r!==r0))[0],c1=rI(5),t=r1<r0?'/':'\\';cells=[[c1,r0,t],[c1,r1,t]];rt=r1;}
+ else{const r1=shuf([0,1,2].filter(r=>r!==r0))[0],r2=[0,1,2].find(r=>r!==r0&&r!==r1),c1=rI(3),c2=c1+1+rI(5-c1);const t1=r1<r0?'/':'\\',t2=r2<r1?'/':'\\';cells=[[c1,r0,t1],[c1,r1,t1],[c2,r1,t2],[c2,r2,t2]];rt=r2;}
+ const key=(c,r)=>c+','+r,onPath=new Set(cells.map(a=>key(a[0],a[1])));const free=[];for(let c=0;c<6;c++)for(let r=0;r<3;r++)if(!onPath.has(key(c,r)))free.push([c,r]);
+ const slotsC=shuf([...cells.map(a=>[a[0],a[1]]),...shuf(free).slice(0,3)]);
+ const need=cells.map(a=>a[2]);const chips=shuf([...need,'/','\\']).map(v=>({v,l:v==='/'?'╱':'╲',c:'mir'}));
+ const sol=bbAss(chips,cells.map(a=>[slotsC.findIndex(s=>s[0]===a[0]&&s[1]===a[1]),a[2]]));
+ let grid='';for(let c=0;c<6;c++)for(let r=0;r<3;r++)grid+=`<rect x="${CX(c)-38}" y="${CY(r)-38}" width="76" height="76" rx="8" class="cell"/>`;
+ const base=`${grid}<rect x="8" y="${CY(r0)-14}" width="40" height="28" rx="6" class="las"/><circle cx="48" cy="${CY(r0)}" r="4" fill="#ff3b5c"/><g class="tgt"><circle cx="572" cy="${CY(rt)}" r="18"/><circle cx="572" cy="${CY(rt)}" r="11"/><circle cx="572" cy="${CY(rt)}" r="4"/></g>`;
+ return{cat:'opt',ic:'🔦',tag:['Lazer va ko‘zgular','Лазер и зеркала','Laser & mirrors'],
+  task:X('Ko‘zgularni qo‘yib, lazer nurini <b>nishonga</b> yo‘naltiring','Расставьте зеркала и направьте луч лазера в <b>мишень</b>','Place mirrors to steer the laser into the <b>target</b>'),
+  hint:X('tushish burchagi = qaytish burchagi','угол падения = углу отражения','angle of incidence = angle of reflection'),goal:X('nur nishonga tegsin','луч попадает в мишень','beam hits the target'),chips,sol,base,
+  slots:slotsC.map(([c,r])=>({x:CX(c),y:CY(r),w:64,h:64,c:'mirsl'})),
+  view(pl){const M={};pl.forEach((k,s)=>{if(k>=0)M[key(slotsC[s][0],slotsC[s][1])]=chips[k].v;});
+   let c=0,r=r0,dx=1,dy=0,n=0;const pts=[[48,CY(r0)]];
+   for(let s=0;s<60;s++){if(c<0||c>5||r<0||r>2)break;const t=M[key(c,r)];if(t){n++;pts.push([CX(c),CY(r)]);if(t==='/')[dx,dy]=[-dy,-dx];else[dx,dy]=[dy,dx];}c+=dx;r+=dy;}
+   const lc=c-dx,lr=r-dy;const ok=dx===1&&r===rt&&r>=0&&r<=2;const end=ok?[560,CY(rt)]:[CX(lc)+dx*70,CY(lr)+dy*70];pts.push(end);
+   return{ok,dyn:`<polyline class="beam" points="${pts.map(p=>p.join(',')).join(' ')}"/>${ok?`<circle cx="572" cy="${CY(rt)}" r="24" class="tgt-on"/>`:''}`,
+    read:bbRows([[X('ko‘zgular yo‘lida','зеркал на пути','mirrors hit'),String(n)],[X('nishon','мишень','target'),ok?'✓':'✗',ok]])};}};}
+pzLaser.cat='opt';
+
+/* 6) zaryadlar: P nuqtada E = 0 */
+function pzCharge(){const V=[[1,2],[2,1],[1,3],[3,1]][rI(4)],a=V[0],b=V[1];const qa=b>a?1:(a/b)**2,qb=b>a?(b/a)**2:1;
+ const pool=[1,2,4,9,-1];const chips=shuf(pool).map(v=>({v,l:`${v>0?'+':'−'}${Math.abs(v)===1?'':Math.abs(v)}q`,c:v>0?'qp':'qn'}));
+ const XA_=110,XB=490,XPp=XA_+(XB-XA_)*a/(a+b);const sol=bbAss(chips,[[0,qa],[1,qb]]);
+ const base=`<line x1="40" y1="160" x2="560" y2="160" class="ax"/><path d="M${XPp-9} 151L${XPp+9} 169M${XPp+9} 151L${XPp-9} 169" class="pp"/>${bbTxt(XPp,140,'P','middle')}
+ <path d="M${XA_} 222V234M${XPp} 222V234M${XB} 222V234M${XA_} 228H${XB}" class="dim"/>${bbTxt((XA_+XPp)/2,250,a===1?'r':a+'r','middle')}${bbTxt((XPp+XB)/2,250,b===1?'r':b+'r','middle')}${bbTxt(XA_,122,'A','middle')}${bbTxt(XB,122,'B','middle')}`;
+ const arrow=(x0,len,cls)=>{if(Math.abs(len)<1)return'';const x1=x0+len,s=Math.sign(len);return`<path class="${cls}" d="M${x0} 160H${x1}M${x1-s*10} 153L${x1} 160L${x1-s*10} 167"/>`;};
+ return{cat:'est',ic:'➕',tag:['Elektr maydon','Электрическое поле','Electric field'],
+  task:X('Zaryadlarni A va B ga qo‘ying: P nuqtada maydon kuchlanganligi <b>nolga</b> teng bo‘lsin','Поставьте заряды в A и B так, чтобы напряжённость поля в точке P была <b>равна нулю</b>','Put charges at A and B so the electric field at P is <b>zero</b>'),
+  hint:'E = k·q / r²',goal:'E(P) = 0',chips,sol,base,
+  slots:[{x:XA_,y:160,w:54,h:54,c:'q'},{x:XB,y:160,w:54,h:54,c:'q'}],
+  view(pl){const A=pl[0]>=0?chips[pl[0]].v:0,B=pl[1]>=0?chips[pl[1]].v:0;const EA=A/(a*a),EB=-B/(b*b),E=EA+EB;const L=v=>Math.sign(v)*Math.min(150,48*Math.sqrt(Math.abs(v)));
+   const full=A&&B,ok=!!full&&Math.abs(E)<1e-9;let dyn='';
+   [[XA_,A],[XB,B]].forEach(([x,q])=>{if(!q)return;for(let k=0;k<12;k++){const an=k/12*Math.PI*2,c=Math.cos(an),s=Math.sin(an),r1=34,r2=56;dyn+=`<line x1="${x+c*r1}" y1="${160+s*r1}" x2="${x+c*r2}" y2="${160+s*r2}" class="fln ${q>0?'p':'n'}"/>`;}});
+   dyn+=`<g transform="translate(0,-34)">${arrow(XPp,L(EA),'ea')}</g><g transform="translate(0,34)">${arrow(XPp,L(EB),'eb')}</g>`;
+   dyn+=ok?`<circle cx="${XPp}" cy="160" r="22" class="zero"/>`:arrow(XPp,L(E),'en');
+   const fe=v=>`${nf(Math.abs(v))} kq/r²`;
+   return{ok,dyn,read:bbRows([['E_A',fe(EA)],['E_B',fe(EB)],['E(P)',fe(E),full?ok:null]])};}};}
+pzCharge.cat='est';
+
+/* 7) issiqlik balansi: T = (m1t1 + m2t2)/(m1 + m2) */
+function pzMix(){let cups,T,pair;
+ for(let t=0;t<500;t++){const ts=shuf([10,20,30,40,50,60,70,80,90]).slice(0,4);cups=ts.map(tt=>({m:1+rI(3),t:tt}));const prs=[];for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const v=(cups[i].m*cups[i].t+cups[j].m*cups[j].t)/(cups[i].m+cups[j].m);prs.push([i,j,v]);}
+  const cand=shuf(prs.filter(p=>Number.isInteger(Math.round(p[2]*1e6)/1e6)&&prs.every(q=>q===p||Math.abs(q[2]-p[2])>=1)));if(cand.length){pair=cand[0];T=pair[2];break;}}
+ const tcol=(t,a=1)=>{const k=Math.max(0,Math.min(1,t/100)),A=[60,140,255],B=[240,64,52];return`rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(' ')} / ${a})`;};const chips=cups.map((c,i)=>({v:i,l:`${c.m} ${U_.kg} · ${c.t} °C`,c:'cup',st:`--cc:${tcol(c.t)}`}));
+ const sol=[pair[0],pair[1]];const YT=t=>250-2*t;let tk='';for(let t=0;t<=100;t+=20)tk+=`<line x1="480" y1="${YT(t)}" x2="490" y2="${YT(t)}" class="tk"/>${bbTxt(496,YT(t)+4,t)}`;
+ const base=`<path d="M150 104V262Q150 272 160 272H360Q370 272 370 262V104" class="bk"/><path d="M205 88V112M197 104L205 114L213 104M315 88V112M307 104L315 114L323 104" class="dim"/><rect x="462" y="44" width="16" height="210" rx="8" class="th"/><circle cx="470" cy="262" r="14" class="thb"/>${tk}<path d="M440 ${YT(T)}H462" class="tline"/>${bbTxt(436,YT(T)+4,`🎯 ${T}°`,'end')}`;
+ return{cat:'trm',ic:'🌡️',tag:['Issiqlik balansi','Тепловой баланс','Heat balance'],
+  task:X(`Ikki idishdagi suvni aralashtiring: harorat <b>${T} °C</b> bo‘lsin`,`Смешайте воду из двух сосудов, чтобы получилось <b>${T} °C</b>`,`Mix water from two cups to get exactly <b>${T} °C</b>`),
+  hint:'T = (m₁t₁ + m₂t₂) / (m₁ + m₂)',goal:`${T} °C`,chips,sol,base,
+  slots:[{x:205,y:58,w:104,h:44,c:'cupsl'},{x:315,y:58,w:104,h:44,c:'cupsl'}],
+  view(pl){const on=pl.filter(c=>c>=0).map(c=>cups[c]);if(!on.length)return{read:bbRows([[X('Idishga suv quying','Налейте воду в сосуд','Pour water into the beaker'),'—']]),dyn:''};
+   const M=on.reduce((s,c)=>s+c.m,0),Tm=on.reduce((s,c)=>s+c.m*c.t,0)/M,ok=on.length===2&&Math.abs(Tm-T)<1e-6;const h=Math.min(150,M*25);
+   let dyn=`<path d="M152 ${270-h}Q205 ${262-h} 260 ${270-h}T368 ${270-h}V262Q368 270 360 270H160Q152 270 152 262Z" class="liq" style="fill:${tcol(Tm,.6)}"/><rect x="465" y="${YT(Tm)}" width="10" height="${254-YT(Tm)}" rx="5" class="hg"/>`;
+   if(Tm>=55)for(let k=0;k<3;k++)dyn+=`<path class="stm" style="animation-delay:${k*.5}s" d="M${200+k*55} ${258-h}q-8 -12 0 -24t0 -24"/>`;
+   return{ok,dyn,read:bbRows([['m',`${M} ${U_.kg}`],['T',`${nf(Tm,1)} °C`,on.length===2?ok:null]])};}};}
+pzMix.cat='trm';
+
+/* 8) Guk qonuni: x = mg/k, uchala prujina bir xil cho‘zilsin */
+function pzSpring(){let ks,c,ms;
+ for(let t=0;t<500;t++){ks=shuf([1,2,3,4]).slice(0,3);c=1+rI(2);const need=ks.map(k=>k*c);if(need.some(v=>v>8))continue;const dec=shuf([1,2,3,4,5,6,7,8].filter(v=>!need.includes(v))).slice(0,2);ms=[...need,...dec];
+  let cnt=0;for(let i=0;i<5;i++)for(let j=0;j<5;j++)for(let k=0;k<5;k++){if(i===j||j===k||i===k)continue;const x=[ms[i]/ks[0],ms[j]/ks[1],ms[k]/ks[2]];if(Math.abs(x[0]-x[1])<1e-9&&Math.abs(x[1]-x[2])<1e-9)cnt++;}if(cnt===1)break;}
+ const chips=shuf(ms).map(v=>({v,l:`${v*100} ${U_.g}`,c:'wt'}));const XS=[165,305,445],PX=22,Y0=72;
+ const sol=bbAss(chips,ks.map((k,i)=>[i,k*c]));
+ let rul='';for(let s=0;s<=8;s++)rul+=`<line x1="70" y1="${Y0+PX*s}" x2="${s%2?78:84}" y2="${Y0+PX*s}" class="tk"/>${s%2?'':bbTxt(90,Y0+PX*s+4,s)}`;
+ const base=`<rect x="110" y="18" width="430" height="12" rx="4" class="bm"/><line x1="70" y1="${Y0}" x2="70" y2="${Y0+PX*8}" class="w" style="opacity:.4"/>${rul}${bbTxt(70,Y0-10,U_.sm,'middle')}${XS.map((x,i)=>bbTxt(x+22,50,`k = ${ks[i]} ${U_.Nsm}`)).join('')}`;
+ const spring=(x,y1)=>{const n=12,y0=30,dy=(y1-y0-16)/n;let d=`M${x} ${y0}V${y0+8}`;for(let i=0;i<n;i++)d+=`L${x+(i%2?-12:12)} ${y0+8+dy*(i+.5)}`;d+=`L${x} ${y1-8}V${y1}`;return`<path class="spr" d="${d}"/>`;};
+ return{cat:'din',ic:'🪝',tag:['Guk qonuni','Закон Гука','Hooke’s law'],
+  task:X('Yuklarni iling: uchala prujina <b>bir xil</b> cho‘zilsin','Подвесьте грузы так, чтобы все три пружины растянулись <b>одинаково</b>','Hang weights so all three springs stretch <b>equally</b>'),
+  hint:'F = k·x  →  x = mg / k',goal:'x₁ = x₂ = x₃',chips,sol,base,
+  slots:XS.map(x=>({x,y:Y0+22,w:66,h:40,c:'wtsl'})),
+  view(pl){const xs=pl.map((k,i)=>k<0?0:chips[k].v/ks[i]);const full=pl.every(k=>k>=0),ok=full&&Math.abs(xs[0]-xs[1])<1e-9&&Math.abs(xs[1]-xs[2])<1e-9;
+   let dyn=XS.map((x,i)=>spring(x,Y0+PX*xs[i])).join('');if(ok)dyn+=`<line x1="96" y1="${Y0+PX*xs[0]}" x2="540" y2="${Y0+PX*xs[0]}" class="lvl"/>`;
+   return{ok,dyn,sy:xs.map(x=>Y0+PX*x+22),read:bbRows(xs.map((x,i)=>[`x${'₁₂₃'[i]}`,`${nf(x)} ${U_.sm}`,full?ok:null]))};}};}
+pzSpring.cat='din';
+
+const BB_PZ=[pzCircA,pzCircB,pzLever,pzLens,pzLaser,pzCharge,pzMix,pzSpring];
+const BBN={5:3,10:5,15:7};
+let bbForce=-1;
+function bbGen(){if(bbForce>=0)return BB_PZ[bbForce]();let g=BB_PZ;if(st.cat){const f=g.filter(x=>x.cat===st.cat);if(f.length)g=f;}return pickFrom('bb'+(st.cat||''),g)();}
+function bbStart(){G.bRounds=BBN[G.rounds]||4;G.br=0;G.bp=0;bbTurn();}
+function bbTurn(){if(G.br>=G.bRounds)return finish();const p=G.bp,my=++qid;if(p===0)G.bpz=bbGen();
+ roundLbl(`${G.br+1} / ${G.bRounds}`);turnHi(G.ai?-1:p);stat(0,'');stat(1,'');
+ if(!G.ai){stage().className='bt-stage';stage().innerHTML=`<div class="bt-inter" style="grid-area:a"><span class="av">${G.pl[p].av}</span><h3>${X('Navbat','Ход','Turn')}: ${esc(G.pl[p].name)}</h3><p class="bt-note">${G.bpz.ic} ${esc(XA(G.bpz.tag))} · ${X('Qurilmani shu o‘yinchiga bering.','Передайте устройство этому игроку.','Pass the device to this player.')}</p><button type="button" class="bt-btn pri" id="bt-ready">${X('Tayyorman','Я готов','I’m ready')} →</button></div>`;
+  $$('#bt-ready').onclick=()=>bbPlay(p,my);}else bbPlay(0,my);}
+function bbPlay(p,my){const P=G.bpz,n=P.slots.length,pl=new Array(n).fill(-1);let sel=null,done=false;
+ const sg=stage();sg.className='bt-stage';
+ sg.innerHTML=`<div class="bt-q bb-q"><span class="bt-tag">${P.ic} ${esc(XA(P.tag))}</span><div class="bt-qt">${P.task}<span class="pr"><span class="bb-hint">${P.hint}</span> · ${X('Detallarni sxemaga sudrang yoki bosib, keyin joyni bosing.','Перетащите детали на схему или нажмите деталь, затем место.','Drag parts onto the scene, or tap a part and then a spot.')}</span></div></div>
+ <div class="bb"><div class="bb-sc" id="bb-sc"><svg viewBox="0 0 600 300" class="bb-svg" aria-hidden="true">${P.base}<g class="bb-dyn"></g></svg><div class="bb-ov">${P.slots.map((s,i)=>`<div class="bt-slot bb-slot ${s.c||''}" data-s="${i}" role="button" tabindex="0" aria-label="${i+1}" style="left:${(s.x-s.w/2)/6}%;top:${(s.y-s.h/2)/3}%;width:${s.w/6}%;height:${s.h/3}%"></div>`).join('')}</div><div class="bb-ok" aria-hidden="true">✓</div></div>
+ <div class="bb-side"><div class="bb-goal">🎯 ${P.goal}</div><div class="bt-tray bb-tray" id="bt-tray">${P.chips.map((c,k)=>`<button type="button" class="bt-chip bb-chip ${c.c||''}" data-c="${k}"${c.st?` style="${c.st}"`:''}>${c.l}</button>`).join('')}</div><div class="bb-read" id="bb-read" aria-live="polite"></div><div class="bt-ddbar"><button type="button" class="bt-btn" id="bb-reset">↺ ${X('Qaytadan','Сначала','Reset')}</button><span class="bt-note" id="bt-ddn"></span></div></div></div>`;
+ const sc=$$('#bb-sc'),dyn=sc.querySelector('.bb-dyn'),rot=sc.querySelector('.bb-rot'),ov=sc.querySelector('.bb-ov'),tray=$$('#bt-tray'),read=$$('#bb-read');
+ const chip=k=>sg.querySelector(`.bb-chip[data-c="${k}"]`),slotEl=s=>sg.querySelector(`.bb-slot[data-s="${s}"]`);
+ const upd=()=>{const v=P.view(pl);dyn.innerHTML=v.dyn||'';read.innerHTML=v.read||'';
+  if(v.rot!=null){const t=`rotate(${v.rot.toFixed(2)}deg)`;if(rot)rot.style.transform=t;ov.style.transform=t;}
+  if(v.sy)v.sy.forEach((y,i)=>{slotEl(i).style.top=((y-P.slots[i].h/2)/3)+'%';});
+  if(v.ok&&!done)later(()=>{if(my===qid&&!done&&P.view(pl).ok)win();},380);};
+ const put=(k,s)=>{if(done)return;const prev=pl.indexOf(k);if(prev>=0)pl[prev]=-1;if(pl[s]>=0)tray.appendChild(chip(pl[s]));pl[s]=k;slotEl(s).appendChild(chip(k));chip(k).classList.remove('sel');sel=null;SND.flip();upd();};
+ const back=k=>{const prev=pl.indexOf(k);if(prev>=0)pl[prev]=-1;tray.appendChild(chip(k));chip(k).classList.remove('sel');sel=null;upd();};
+ const pick=(k,c)=>{if(sel===k){c.classList.remove('sel');sel=null;}else{sg.querySelectorAll('.bb-chip.sel').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');sel=k;}};
+ sg.querySelectorAll('.bb-chip').forEach(c=>{const k=+c.dataset.c;let sx=0,sy=0,drag=null,moved=false;
+  const hot=e=>{sg.querySelectorAll('.bb-slot.hot').forEach(s=>s.classList.remove('hot'));const el=document.elementFromPoint(e.clientX,e.clientY);return el;};
+  c.onpointerdown=e=>{if(done)return;e.preventDefault();sx=e.clientX;sy=e.clientY;moved=false;c.setPointerCapture(e.pointerId);};
+  c.onpointermove=e=>{if(done||!c.hasPointerCapture(e.pointerId))return;if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){moved=true;drag=c.cloneNode(true);drag.classList.add('bt-ghost','bb-ghost');drag.style.width=Math.max(56,Math.min(150,c.offsetWidth))+'px';root.appendChild(drag);c.style.opacity='.3';}
+   if(drag){drag.style.left=e.clientX+'px';drag.style.top=e.clientY+'px';const el=hot(e);const s=el&&el.closest('.bb-slot');if(s)s.classList.add('hot');}};
+  const end=e=>{if(drag){drag.remove();drag=null;c.style.opacity='';const el=hot(e);const s=el&&el.closest('.bb-slot');if(s)put(k,+s.dataset.s);else if(el&&el.closest('.bb-side,.bb-q'))back(k);}
+   else if(!moved&&!done){if(c.closest('.bb-slot')){back(k);return;}pick(k,c);}};
+  c.onpointerup=end;c.onpointercancel=()=>{if(drag){drag.remove();drag=null;c.style.opacity='';}};
+  c.onclick=e=>{if(e.detail===0&&!done){if(c.closest('.bb-slot'))back(k);else pick(k,c);}};});
+ sg.querySelectorAll('.bb-slot').forEach(s=>{const go=()=>{if(sel!=null&&!done)put(sel,+s.dataset.s);};s.onclick=e=>{if(e.target.closest('.bb-chip'))return;go();};s.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(e.target!==s)return;e.preventDefault();go();}};});
+ $$('#bb-reset').onclick=()=>{if(done)return;pl.forEach((k,s)=>{if(k>=0)back(k);});};
+ const dur=75000,t0=performance.now();
+ const showSol=()=>{pl.forEach((k,s)=>{if(k>=0){pl[s]=-1;tray.appendChild(chip(k));}});P.sol.forEach((k,s)=>{if(k!=null&&k>=0){pl[s]=k;slotEl(s).appendChild(chip(k));}});upd();};
+ const stop=()=>{done=true;qid++;if(raf)cancelAnimationFrame(raf);raf=0;sg.querySelectorAll('.bb-chip').forEach(x=>x.disabled=true);sg.querySelectorAll('.bb-slot').forEach(x=>x.tabIndex=-1);const rs=$$('#bb-reset');if(rs)rs.remove();};
+ const nextBtn=(auto)=>{const bar=sg.querySelector('.bb-side .bt-ddbar');const b=document.createElement('button');b.type='button';b.className='bt-btn pri';b.id='bt-next';b.textContent=X('Davom etish','Дальше','Continue')+' →';bar.prepend(b);b.focus({preventScroll:true});let gone=false;const go=()=>{if(gone)return;gone=true;if(G.ai){G.br++;}else{if(G.bp===0)G.bp=1;else{G.bp=0;G.br++;}}bbTurn();};b.onclick=go;if(auto){const m=qid;later(()=>{if(m===qid)go();},auto);}};
+ const win=()=>{if(done)return;const left=G.left();stop();const pp=G.pl[p];pp.streak++;pp.best=Math.max(pp.best,pp.streak);pp.ok++;pp.tsum+=dur-left;pp.tn++;
+  const pts=Math.round((100+150*left/dur)*mult(pp.streak));pp.score+=pts;streakUi();sc.classList.add('win');burst(sc);flash(true);SND.ok(pp.streak);fly(sc,p,'+'+pts);setTimeout(setScore,520);
+  stat(p,X('yig‘di ✓','собрал ✓','built ✓')+` ${((dur-left)/1000).toFixed(1)} s`);if(G.ai){stat(1,X('to‘xtadi','остановлен','stopped'));say('lose');}
+  toast(`${pp.av} ${X('Model ishladi!','Модель работает!','It works!')} +${pts}`);nextBtn(G.ai?2600:0);};
+ const lose=(aiWon)=>{if(done)return;stop();const pp=G.pl[p];pp.streak=0;streakUi();shake();SND.bad();
+  if(aiWon){const ai=G.pl[1],left=G.left();ai.streak++;ai.best=Math.max(ai.best,ai.streak);ai.ok++;ai.tsum+=dur-left;ai.tn++;const pts=Math.round((100+150*left/dur)*mult(ai.streak));ai.score+=pts;streakUi();fly($$('#bt-pl1'),1,'+'+pts);setTimeout(setScore,520);say('win');toast(`🤖 ${X('Robot birinchi yig‘di','Робот собрал первым','The robot built it first')} +${pts}`,true);}
+  else toast(`⏱ ${X('Vaqt tugadi','Время вышло','Time’s up')}`,true);
+  if(G.ai&&!aiWon)G.pl[1].streak=0;
+  $$('#bt-ddn').textContent=X('To‘g‘ri yechim ko‘rsatildi','Показано верное решение','Here is a correct solution');setTimeout(()=>{if(G&&my+1===qid){showSol();sc.classList.add('sol');}},500);nextBtn(0);};
+ // robot poygasi
+ if(G.ai){const fail=Math.random()<[0.3,0.15,0.05][st.diff];const T=rnd(...[[30,50],[18,32],[10,20]][st.diff])*1000;const stopAt=fail?rnd(.55,.9):1;
+  const tick=()=>{if(my!==qid||done)return;const k=Math.min(1,(performance.now()-t0)/T);const pc=Math.min(stopAt,k);stat(1,`🛠️ ${Math.round(pc*100)}%${fail&&k>=stopAt?' 🤔':''}`);if(!fail&&k>=1){lose(true);return;}later(tick,400);};later(tick,400);}
+ upd();G.left=timer(dur,()=>lose(false),my);}
+
 function finish(){clearAll();stat(0,'');stat(1,'');[0,1].forEach(i=>{const e=$$('#bt-pl'+i);if(e)e.classList.remove('frozen');});const [a,b]=G.pl;const w=a.score===b.score?-1:a.score>b.score?0:1;
  if(G.ai){const wins=store.get('wins',[0,0,0]);if(w===0){wins[st.diff]++;store.set('wins',wins);}}
  const human=w===0||(!G.ai&&w===1);
@@ -7690,7 +7983,7 @@ function finish(){clearAll();stat(0,'');stat(1,'');[0,1].forEach(i=>{const e=$$(
  const sub=w<0?X('Kuchlar teng. Yana bir bor?','Силы равны. Ещё раз?','Evenly matched. Again?'):w===0&&G.ai?X('Robotni yengdingiz! Endi qiyinroq darajani sinab ko‘ring.','Вы победили робота! Попробуйте уровень посложнее.','You beat the robot! Try a harder level next.'):w===1&&G.ai?X('Robot bu safar kuchliroq chiqdi. Qayta urinib ko‘ring!','В этот раз робот оказался сильнее. Попробуйте ещё!','The robot won this time. Have another go!'):X('Ajoyib bellashuv bo‘ldi!','Отличная была битва!','What a battle!');
  turnHi(-1);roundLbl(X('yakun','финиш','final'));const ring=$$('#bt-ring');if(ring){ring.style.setProperty('--p',1);ring.classList.remove('low','beat');}const tn=$$('#bt-tn');if(tn)tn.textContent='🏁';
  const avg=p=>p.tn?(p.tsum/p.tn/1000).toFixed(1).replace('.',LG==='en'?'.':','):'–';
- const okLbl=G.type==='memory'?X('juftlik','пар','pairs'):G.type==='drag'?X('to‘g‘ri joy','верных мест','correct slots'):X('yutgan savol','выиграно вопросов','questions won');
+ const okLbl=G.type==='memory'?X('juftlik','пар','pairs'):G.type==='drag'?X('to‘g‘ri joy','верных мест','correct slots'):G.type==='build'?X('yig‘ilgan model','собрано моделей','models built'):X('yutgan savol','выиграно вопросов','questions won');
  // XP va yutuqlar
  let xpHtml='';const JF=window.JF;
  if(JF){const best=Math.max(a.score,G.ai?0:b.score);const gain=Math.round(best/10)+(human?50:10);const r0=JF.rank();const info=JF.addXP(gain,true);
@@ -7714,7 +8007,7 @@ function confetti(){if(RMO)return;const cv=document.createElement('canvas');cv.c
 
 /* ---------- klaviatura ---------- */
 addEventListener('keydown',e=>{if(root.hidden)return;if(e.key==='Escape'){if(G)lobby();else close();return;}
- if(!G||!G.q||G.q.done||G.type==='drag'||G.type==='memory')return;if(e.target.closest&&e.target.closest('input,select'))return;
+ if(!G||!G.q||G.q.done||G.type==='drag'||G.type==='memory'||G.type==='build')return;if(e.target.closest&&e.target.closest('input,select'))return;
  const key=e.key.toLowerCase();for(let i=0;i<2;i++){if(i===1&&G.ai)break;const k=KEYS[i].indexOf(e.key);if(k>=0&&k<G.q.opts.length){answer(i,k);e.preventDefault();}const pk=PWK[i].indexOf(key);if(pk>=0){usePw(i,'hfd'[pk]);e.preventDefault();}}});
 
 /* ---------- ochish / yopish ---------- */
@@ -7733,7 +8026,7 @@ const tb=document.getElementById('topbar');if(tb){const b=document.createElement
 const cards=document.getElementById('cards');if(cards){const b=document.createElement('button');b.type='button';b.className='card spot btcard';b.dataset.notr='1';
  b.innerHTML=`<span class="sym">⚔️</span><span class="tx"><b>${X('Bellashuv: sun’iy intellekt yoki do‘st bilan','Битва: с ИИ или с другом','Battle: against the AI or a friend')}</b><small>${X('Viktorina, formulani top, joyiga qo‘y, tez hisob, xotira juftliklari va boshqa o‘yinlar','Викторина, найди формулу, расставь по местам, быстрый расчёт, пары на память и другие игры','Quiz, find the formula, put it in place, quick maths, memory pairs and more')}</small></span><span class="go" aria-hidden="true">→</span>`;b.onclick=()=>open(true);cards.insertBefore(b,cards.firstChild);}
 if(location.hash==='#/jang')open(false);
-window.__bt={state:()=>G,answer,start,lobby,st};
+window.__bt={state:()=>G,answer,start,lobby,st,force:i=>{bbForce=i;}};
 })();
 
 /* ✨ Qo‘shimchalar: tezkor qidiruv, XP va unvonlar, yutuqlar, o‘rganish progressi, kun formulasi, tasodifiy tajriba, taqdimot rejimi */
