@@ -2,7 +2,8 @@
 
 Fizika formulalarini jonli animatsiyalar orqali tushuntiruvchi interaktiv sayt. Har bir mavzuda parametrlarni oʻzgartirib, natijani darhol koʻrish mumkin.
 
-- 145 ta mavzu, 14 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, kvant fizikasi, yadro fizikasi)
+- 170 ta mavzu, 14 boʻlim (kinematika, dinamika, statika, saqlanish qonunlari, tebranishlar, molekulyar fizika, termodinamika, elektrostatika, tok, magnetizm, optika, nisbiylik, kvant fizikasi, yadro fizikasi)
+- Yangi 25 mavzu: aylanma tezlanish, narvon muvozanati, areometr, aravachalar toʻqnashuvi, potensial energiya grafigi, kuch impulsi (tuxum), truba rezonansi, Maksvell taqsimoti, erkin yugurish yoʻli, Otto sikli, p–V ish, kuch chiziqlari, Milliken tajribasi, Faradey qafasi, shunt, siklotron, elektr dvigatel, ikki yassi koʻzgu, mikroskop, relyativistik Doppler, Minkovskiy diagrammasi, radiouglerod usuli, gamma yutilishi, rentgen spektri, elektron qobiqlar
 - Har bir boʻlim uchun erkin laboratoriya (🔬), jumladan Shryodinger tenglamasini yechadigan kvant laboratoriyasi
 - Barcha mavzularda 3D koʻrinish (Three.js)
 - ⚔️ Bellashuv: sunʼiy intellekt (3 daraja) yoki doʻst bilan bir qurilmada oʻynash. Oʻyinlar: viktorina, formulani top, joyiga qoʻy, tez hisob, toʻgʻri yoki notoʻgʻri, mavzuni top, xotira juftliklari, aralash (`#/jang` havolasi). Yangi: VS intro va 3‑2‑1 sanoq, 🔥 seriya (×1,5 / ×2), kuchaytirgichlar (50/50, ❄️ muzlatish, ×2 ochko), tortishuv chizigʻi, robot gaplari, yakunda statistika va XP
